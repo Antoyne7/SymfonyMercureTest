@@ -1,0 +1,84 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Hello MainController!{% endblock %}
+
+{% block stylesheets %}
+    {{ encore_entry_link_tags('messagerie') }}
+{% endblock %}
+
+{% block body %}
+    <style>
+        .example-wrapper {
+            margin: 1em auto;
+            max-width: 800px;
+            width: 95%;
+            font: 18px/1.5 sans-serif;
+        }
+
+        .example-wrapper code {
+            background: #F5F5F5;
+            padding: 2px 6px;
+        }
+    </style>
+
+    <div class="example-wrapper">
+        <h1>Hello {{ controller_name }}! ✅</h1>
+
+        This friendly message is coming from:
+        <ul>
+            <li>Your controller at <code><a
+                            href="{{ 'C:/wamp64/www/Workspaces/Symfony/test4/src/Controller/MainController.php'|file_link(0) }}">src/Controller/MainController.php</a></code>
+            </li>
+            <li>Your template at <code><a
+                            href="{{ 'C:/wamp64/www/Workspaces/Symfony/test4/templates/main/index.html.twig'|file_link(0) }}">templates/main/index.html.twig</a></code>
+            </li>
+        </ul>
+    </div>
+    {{ dump(users) }}
+    <div id="messagerie">
+        <h2>Messagerie !</h2>
+
+        <ul id="user-choice">
+            {% for user in users %}
+                {% if user is not same as(app.user) %}
+                    <li><a href="{{ path('accueil',{userToSend:user.id}) }}">{{ user.email }}</a></li>
+                {% endif %}
+            {% endfor %}
+        </ul>
+        {% if userToSend is defined and userToSend is not null and userToSend is not same as(app.user) %}
+            {#            {{ dump(userToSend) }}#}
+            <ul id="messages">
+                {% for message in messagesSent %}
+                    <li>
+                        <div>{{message.sendBy.email}}</div>
+                        <div>{{message.value}}
+                        </div>
+                    </li>
+                {% endfor %}
+                {% for message in messagesReceived %}
+                    <li>
+                        <div>{{message.sendBy.email}}</div>
+                        <div>{{message.value}}
+                        </div>
+                    </li>
+                {% endfor %}
+
+
+
+            </ul>
+
+            <form action="{{ path('ping',{toUser: userToSend.id}) }}" class="send-zone" method="post">
+                <label>
+                    <input class="text" type="text" name="message" placeholder="Écrivez votre message ici ...">
+                </label>
+                <button type="submit" class="btn btn-primary send">
+                    Send
+                </button>
+            </form>
+        {% endif %}
+    </div>
+{% endblock %}
+
+{% block javascripts %}
+    {{ encore_entry_script_tags('messagerie') }}
+{% endblock %}
